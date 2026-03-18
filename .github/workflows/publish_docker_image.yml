@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
 name: Publish Docker image
 on:
   release:
@@ -15,7 +16,7 @@ jobs:
       id-token: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Extract metadata (tags, labels) for Docker
