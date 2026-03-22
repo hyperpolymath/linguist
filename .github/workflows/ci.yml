@@ -22,9 +22,9 @@ jobs:
       matrix:
         ruby: [ '3.3', '3.2', '3.1' ]
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1
     - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd # v1
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
@@ -43,7 +43,7 @@ jobs:
     name: Test Dockerfile
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@50fbc622fc4ef5163becd7fab6573eac35f8462e # v1
     - name: Build container
       run: docker build -t linguist .
     - name: Analyse current directory
@@ -54,9 +54,9 @@ jobs:
     name: Classifier cross-validation
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
     - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
+      uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd # v1
       with:
         ruby-version: '3.3'
         bundler-cache: true
