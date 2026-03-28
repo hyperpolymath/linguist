@@ -1,5 +1,0 @@
-= linguist
-:toc: preamble
-:icons: font
-
-
