@@ -1,0 +1,160 @@
+// SPDX-License-Identifier: MIT
+// (Original project: MIT license; hyperpolymath fork/mirror)
+
+= Linguist
+:toc: preamble
+:icons: font
+
+image:https://github.com/github/linguist/workflows/Run%20Tests/badge.svg[Actions Status,link="https://github.com/github/linguist/actions"]
+image:https://github.com/codespaces/badge.svg[Open in GitHub Codespaces,link="https://codespaces.new/github-linguist/linguist"]
+
+This library is used on GitHub.com to detect blob languages, ignore binary or
+vendored files, suppress generated files in diffs, and generate language
+breakdown graphs.
+
+== Documentation
+
+* link:docs/how-linguist-works.md[How Linguist works]
+* link:docs/overrides.md[Change Linguist's behaviour with overrides]
+* link:docs/troubleshooting.md[Troubleshooting]
+* link:CONTRIBUTING.md[Contributing guidelines]
+
+== Installation
+
+Install the gem:
+
+[source,bash]
+----
+gem install github-linguist
+----
+
+=== Dependencies
+
+Linguist is a Ruby library. You will need a recent version of Ruby installed.
+Known problems exist with the macOS/Xcode supplied version of Ruby — use
+Homebrew, `rbenv`, `rvm`, `ruby-build`, `asdf`, or another packaging system.
+
+Linguist uses https://github.com/brianmario/charlock_holmes[`charlock_holmes`]
+for character encoding and https://github.com/libgit2/rugged[`rugged`] for
+libgit2 bindings.
+
+Dependencies:
+
+. `charlock_holmes`: cmake, pkg-config, https://site.icu-project.org/[ICU], https://zlib.net/[zlib]
+. `rugged`: https://curl.haxx.se/libcurl/[libcurl], https://www.openssl.org[OpenSSL]
+
+macOS (Homebrew):
+
+[source,bash]
+----
+brew install cmake pkg-config icu4c
+----
+
+Ubuntu:
+
+[source,bash]
+----
+sudo apt-get install build-essential cmake pkg-config libicu-dev zlib1g-dev \
+  libcurl4-openssl-dev libssl-dev ruby-dev
+----
+
+== Usage
+
+=== Application Usage
+
+[source,ruby]
+----
+require 'rugged'
+require 'linguist'
+
+repo = Rugged::Repository.new('.')
+project = Linguist::Repository.new(repo, repo.head.target_id)
+project.language       #=> "Ruby"
+project.languages      #=> { "Ruby" => 119387 }
+----
+
+=== Command Line Usage
+
+==== Git Repository
+
+[source,console]
+----
+$ github-linguist
+66.84%  264519     Ruby
+24.68%  97685      C
+6.57%   25999      Go
+1.29%   5098       Lex
+0.32%   1257       Shell
+0.31%   1212       Dockerfile
+----
+
+==== Additional Options
+
+`--rev REV` — Analyze a specific git revision:
+
+[source,console]
+----
+$ github-linguist jekyll --rev origin/gh-pages
+100.00% 2568354    HTML
+----
+
+`--breakdown` or `-b` — Show breakdown of files by language:
+
+[source,console]
+----
+$ github-linguist --breakdown
+66.84%  264519     Ruby
+...
+Ruby:
+Gemfile
+Rakefile
+...
+----
+
+`--json` or `-j` — Output in JSON format:
+
+[source,console]
+----
+$ github-linguist --json
+{"Dockerfile":{"size":1212,"percentage":"0.31"},"Ruby":{"size":264519,"percentage":"66.84"},...}
+----
+
+==== Single File
+
+[source,console]
+----
+$ github-linguist grammars.yml
+grammars.yml: 884 lines (884 sloc)
+  type:      Text
+  mime type: text/x-yaml
+  language:  YAML
+----
+
+==== Docker
+
+[source,console]
+----
+$ docker run --rm -v $(pwd):$(pwd):Z -w $(pwd) -t ghcr.io/github-linguist/linguist:latest
+----
+
+Build the image:
+
+[source,console]
+----
+$ docker build -t linguist .
+$ docker run --rm -v $(pwd):$(pwd):Z -w $(pwd) -t linguist
+----
+
+== Contributing
+
+Please check out our link:CONTRIBUTING.md[contributing guidelines].
+
+Wondering how this works? See link:EXPLAINME.adoc[].
+
+== License
+
+The language grammars included in this gem are covered by their repositories'
+respective licenses. link:/vendor/README.md[`vendor/README.md`] lists the
+repository for each grammar.
+
+All other files are covered by the MIT license. See link:LICENSE[LICENSE].
