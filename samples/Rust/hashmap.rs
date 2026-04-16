@@ -1661,8 +1661,8 @@ mod test_map {
         assert_eq!(m.len(), 1);
         assert!(m.insert(2, 4).is_none());
         assert_eq!(m.len(), 2);
-        assert_eq!(*m.get(&1).unwrap(), 2);
-        assert_eq!(*m.get(&2).unwrap(), 4);
+        assert_eq!(*m.get(&1).expect("TODO: handle error"), 2);
+        assert_eq!(*m.get(&2).expect("TODO: handle error"), 4);
     }
 
     thread_local! { static DROP_VECTOR: RefCell<Vec<isize>> = RefCell::new(Vec::new()) }
@@ -1906,9 +1906,9 @@ mod test_map {
     fn test_insert_overwrite() {
         let mut m = HashMap::new();
         assert!(m.insert(1, 2).is_none());
-        assert_eq!(*m.get(&1).unwrap(), 2);
+        assert_eq!(*m.get(&1).expect("TODO: handle error"), 2);
         assert!(!m.insert(1, 3).is_none());
-        assert_eq!(*m.get(&1).unwrap(), 3);
+        assert_eq!(*m.get(&1).expect("TODO: handle error"), 3);
     }
 
     #[test]
@@ -1917,26 +1917,26 @@ mod test_map {
         assert!(m.insert(1, 2).is_none());
         assert!(m.insert(5, 3).is_none());
         assert!(m.insert(9, 4).is_none());
-        assert_eq!(*m.get(&9).unwrap(), 4);
-        assert_eq!(*m.get(&5).unwrap(), 3);
-        assert_eq!(*m.get(&1).unwrap(), 2);
+        assert_eq!(*m.get(&9).expect("TODO: handle error"), 4);
+        assert_eq!(*m.get(&5).expect("TODO: handle error"), 3);
+        assert_eq!(*m.get(&1).expect("TODO: handle error"), 2);
     }
 
     #[test]
     fn test_conflict_remove() {
         let mut m = HashMap::with_capacity(4);
         assert!(m.insert(1, 2).is_none());
-        assert_eq!(*m.get(&1).unwrap(), 2);
+        assert_eq!(*m.get(&1).expect("TODO: handle error"), 2);
         assert!(m.insert(5, 3).is_none());
-        assert_eq!(*m.get(&1).unwrap(), 2);
-        assert_eq!(*m.get(&5).unwrap(), 3);
+        assert_eq!(*m.get(&1).expect("TODO: handle error"), 2);
+        assert_eq!(*m.get(&5).expect("TODO: handle error"), 3);
         assert!(m.insert(9, 4).is_none());
-        assert_eq!(*m.get(&1).unwrap(), 2);
-        assert_eq!(*m.get(&5).unwrap(), 3);
-        assert_eq!(*m.get(&9).unwrap(), 4);
+        assert_eq!(*m.get(&1).expect("TODO: handle error"), 2);
+        assert_eq!(*m.get(&5).expect("TODO: handle error"), 3);
+        assert_eq!(*m.get(&9).expect("TODO: handle error"), 4);
         assert!(m.remove(&1).is_some());
-        assert_eq!(*m.get(&9).unwrap(), 4);
-        assert_eq!(*m.get(&5).unwrap(), 3);
+        assert_eq!(*m.get(&9).expect("TODO: handle error"), 4);
+        assert_eq!(*m.get(&5).expect("TODO: handle error"), 3);
     }
 
     #[test]
@@ -2250,7 +2250,7 @@ mod test_map {
                 assert_eq!(view.insert(100), 10);
             }
         }
-        assert_eq!(map.get(&1).unwrap(), &100);
+        assert_eq!(map.get(&1).expect("TODO: handle error"), &100);
         assert_eq!(map.len(), 6);
 
 
@@ -2263,7 +2263,7 @@ mod test_map {
                 *v = new_v;
             }
         }
-        assert_eq!(map.get(&2).unwrap(), &200);
+        assert_eq!(map.get(&2).expect("TODO: handle error"), &200);
         assert_eq!(map.len(), 6);
 
         // Existing key (take)
@@ -2284,7 +2284,7 @@ mod test_map {
                 assert_eq!(*view.insert(1000), 1000);
             }
         }
-        assert_eq!(map.get(&10).unwrap(), &1000);
+        assert_eq!(map.get(&10).expect("TODO: handle error"), &1000);
         assert_eq!(map.len(), 6);
     }
 
